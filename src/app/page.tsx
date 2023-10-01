@@ -5,6 +5,14 @@ import { useNonce } from "../scripts/useNonce";
 // import loginAnimationData from "../components/interface/animations/login.json";
 // import googleAnimationData from "../components/interface/animations/google.json";
 
+
+// ユーザーはあなたのアプリケーションにアクセスし、「Googleでログイン」ボタンをクリックします。
+// ユーザーはhttps://accounts.google.com/o/oauth2/v2/auth?${params} にリダイレクトされ、
+// Googleアカウントでログインし、アプリケーションへのアクセスを許可します。
+// ユーザーはhttps://zklogin-dev-redirect.vercel.app/api/auth にリダイレクトされ、
+// このエンドポイントは認証コードまたはトークンを受け取り、それを使用してアクセストークンを取得します。
+// アクセストークンを取得した後、アプリケーションはユーザーをhttp://localhost:4000/dashboard にリダイレクトし、
+// ユーザーはアプリケーションのダッシュボードにアクセスできます。
 export default function Home() {
   // const { container } = useLottie(loginAnimationData, true);
   // const { container: googleAnimationContainer } = useLottie(
@@ -13,7 +21,8 @@ export default function Home() {
   // );
   const { nonce } = useNonce();
 
-  const REDIRECT_URI = "http://localhost:3000/dashboard";
+  // ユーザーがログインした後にアプリケーションがユーザーをリダイレクトする目的地
+  const REDIRECT_URI = "http://localhost:4000/login";
 
   const paramsObject: Record<string, string> = {
     state: new URLSearchParams({
@@ -44,6 +53,8 @@ export default function Home() {
   //   nonce: nonce !== null ? nonce : undefined,
   // });
 
+  // GoogleのOAuth 2.0認証エンドポイント
+  // このURLにリダイレクトすることで、ユーザーはGoogleアカウントでログインし、アプリケーションへのアクセスを許可することができる
   const loginURL = `https://accounts.google.com/o/oauth2/v2/auth?${params}`;
 
   return (
