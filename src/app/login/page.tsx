@@ -2,10 +2,12 @@
 
 // pages/dashboard.tsx
 import React, { useContext, useEffect } from "react";
+import { decodeJwt } from "jose";
 import { AuthContext } from "../../context/authContext";
 import { LogoutButton } from "../../components/LogoutButton";
 import { BalanceView } from "@/components/BalanceView";
-import { ADDRESS } from "@/config";
+import { TransferView } from "@/components/TransferView";
+import { STATE, ADDRESS, INPUTS, JWT } from "@/config";
 
 const DashboardView: React.FC = () => {
   const { address } = useContext(AuthContext);
@@ -28,6 +30,7 @@ const DashboardView: React.FC = () => {
       <div style={{ fontWeight: "bold" }}>
         Network: <span style={{ fontWeight: "normal" }}>devnet</span>
       </div>
+      <TransferView />
       <LogoutButton />
     </div>
   );

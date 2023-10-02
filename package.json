@@ -12,6 +12,7 @@
     "@mysten/sui.js": "^0.42.0",
     "@mysten/zklogin": "^0.1.4",
     "bigint-buffer": "^1.1.5",
+    "jose": "^4.14.6",
     "next": "latest",
     "react": "latest",
     "react-dom": "latest"
