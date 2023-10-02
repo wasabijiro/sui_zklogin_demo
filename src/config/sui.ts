@@ -10,3 +10,5 @@ export const config = {
 export const provider = new SuiClient({
   url: getFullnodeUrl(config.network as any),
 });
+
+export const proxy = (url: string) => "https://cors-proxy.fringe.zone/" + url;

@@ -23,7 +23,7 @@ export default function Home() {
   console.log({ nonce });
 
   // ユーザーがログインした後にアプリケーションがユーザーをリダイレクトする目的地
-  const REDIRECT_URI = "http://localhost:4000/login";
+  const REDIRECT_URI = window.location.origin + "/login";
 
   const paramsObject: Record<string, string> = {
     state: new URLSearchParams({
