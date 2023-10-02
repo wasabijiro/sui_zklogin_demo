@@ -8,7 +8,7 @@ import {
   Ed25519PublicKey,
 } from "@mysten/sui.js/keypairs/ed25519";
 
-const moveCallTransfer = async ({ target, amount }) => {
+export const moveCallTransfer = async ({ target, amount }) => {
   let txb = new TransactionBlock();
   const [coin] = txb.splitCoins(txb.gas, [txb.pure(amount)]);
   txb.transferObjects([coin], txb.pure(target));

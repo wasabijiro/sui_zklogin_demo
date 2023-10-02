@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { moveCallTransfer } from "@/scripts/transfer";
+import { moveCallTransfer } from "../scripts/transfer";
 
 export const TransferView = () => {
   const [target, setTarget] = useState("");
