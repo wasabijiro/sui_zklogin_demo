@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 // pages/dashboard.tsx
 import React, { useContext } from "react";
@@ -6,6 +6,8 @@ import { AuthContext } from "../../context/authContext";
 
 const DashboardView: React.FC = () => {
   const { address } = useContext(AuthContext);
+
+  console.log({ address });
 
   return (
     <div className="flex w-full flex-col gap-2 items-center justify-between">

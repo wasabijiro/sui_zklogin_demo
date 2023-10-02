@@ -3,6 +3,8 @@ import { SuiClient, getFullnodeUrl } from "@mysten/sui.js/client";
 import { Ed25519Keypair } from "@mysten/sui.js/keypairs/ed25519";
 import { useEffect, useState } from "react";
 import { config, provider } from "../config/sui";
+import { Params } from "../types";
+import { STATE } from "@/config";
 
 // Handle Buffer error
 (window as any).global = window;
@@ -59,6 +61,13 @@ export const useNonce = () => {
 
         const randomness = generateRandomness();
 
+        const state: Params = {
+          epoch: maxEpoch,
+          randomness: randomness.toString(),
+          ephPublic: ephemeralKeyPair.getPublicKey().toBase64(),
+          ephPrivate: ephemeralKeyPair.export().privateKey,
+        };
+
         // const maxEpoch = epoch + 2;
         // const ephemeralKeyPair = new Ed25519Keypair();
         // const randomness = generateRandomness();
@@ -67,6 +76,8 @@ export const useNonce = () => {
           maxEpoch,
           randomness
         );
+
+        localStorage.setItem(STATE, JSON.stringify(state));
         setNonce(calculatedNonce);
       } catch (error) {
         console.error("Error getting nonce:", error);
