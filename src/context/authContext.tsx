@@ -1,7 +1,13 @@
-"use client"
+"use client";
 
 // context/authContext.tsx
-import React, { createContext, useCallback, useEffect, useState, FC } from "react";
+import React, {
+  createContext,
+  useCallback,
+  useEffect,
+  useState,
+  FC,
+} from "react";
 import { jwtToAddress } from "@mysten/zklogin";
 
 interface AuthContextProps {
@@ -43,9 +49,9 @@ export const AuthProvider: FC = ({ children }) => {
     getAddress(idToken);
   }, [fetchSalt, getAddress]);
 
+  console.log({ address });
+
   return (
-    <AuthContext.Provider value={{ address }}>
-      {children}
-    </AuthContext.Provider>
+    <AuthContext.Provider value={{ address }}>{children}</AuthContext.Provider>
   );
 };

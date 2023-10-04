@@ -29,8 +29,7 @@ export default function Home() {
     state: new URLSearchParams({
       redirect_uri: REDIRECT_URI,
     }).toString(),
-    client_id:
-      "25769832374-famecqrhe2gkebt5fvqms2263046lj96.apps.googleusercontent.com",
+    client_id: process.env.GOOGLE_CLIENT_ID!,
     redirect_uri: "https://zklogin-dev-redirect.vercel.app/api/auth",
     response_type: "id_token",
     scope: "openid",

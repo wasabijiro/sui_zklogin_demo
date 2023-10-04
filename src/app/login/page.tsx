@@ -1,7 +1,7 @@
 "use client";
 
 // pages/dashboard.tsx
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { decodeJwt } from "jose";
 import { AuthContext } from "../../context/authContext";
 import { LogoutButton } from "../../components/LogoutButton";
@@ -19,21 +19,27 @@ import {
 } from "@mysten/zklogin";
 
 const DashboardView: React.FC = () => {
-  const { address } = useContext(AuthContext);
+  // const { address } = useContext(AuthContext);
 
-  console.log({ address });
+  // console.log({ address });
+
+  const [addr, setAddr] = useState<string | null>(null);
 
   useEffect(() => {
-    if (address) {
-      localStorage.setItem(ADDRESS, address);
-    }
+    // if (address) {
+    //   localStorage.setItem(ADDRESS, address);
+    // }
     const executeCode = async () => {
-      const qs = new URLSearchParams(window.location.href);
-      console.log({ qs });
-      const jwt = qs.get("id_token")!;
-      // console.log({ jwt });
+      // const qs = new URLSearchParams(window.location.href);
+      const hash = window.location.hash;
+      console.log({ hash });
+      const params = new URLSearchParams(hash.slice(1));
+      const jwt = params.get("id_token")!;
+      // console.log({ qs });
+      // const jwt = qs.get("id_token")!;
       window.history.replaceState({}, document.title, "/");
       const state: Params = JSON.parse(localStorage.getItem(STATE)!);
+      // console.log({ jwt });
       const { salt }: { salt: string } = await fetch(proxy(config.salt), {
         method: "POST",
         headers: {
@@ -45,6 +51,26 @@ const DashboardView: React.FC = () => {
       }).then((res) => res.json());
 
       console.log({ salt });
+      console.log({ jwt });
+
+      const jwtParsed = decodeJwt(jwt);
+
+      console.log({ jwtParsed });
+
+      const addressSeed = genAddressSeed(
+        BigInt(salt),
+        "sub",
+        jwtParsed.sub!,
+        Array.isArray(jwtParsed.aud) ? jwtParsed.aud[0] : jwtParsed.aud!
+      );
+
+      const addr = jwtToAddress(jwt, BigInt(salt));
+
+      console.log({ addr });
+
+      setAddr(addr);
+
+      localStorage.setItem(ADDRESS, addr);
 
       const partialZk = createPartialZKSignature(
         jwt,
@@ -62,38 +88,36 @@ const DashboardView: React.FC = () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(partialZk),
-      }).then((res) => res.json());
+      }).then((res) => {
+        if (!res.ok) {
+          return res.text().then((text) => {
+            console.error("Error response body:", text);
+            throw new Error("Server responded with an error");
+          });
+        }
+        return res.json();
+      });
 
       console.log({ proofs });
 
-      const jwtParsed = decodeJwt(jwt);
-
-      console.log({ jwtParsed });
-
-      const addressSeed = genAddressSeed(
-        BigInt(salt),
-        "sub",
-        jwtParsed.sub!,
-        Array.isArray(jwtParsed.aud) ? jwtParsed.aud[0] : jwtParsed.aud!
-      );
-
-      const addr = jwtToAddress(jwt, BigInt(salt));
       const inputs: ZkSignatureInputs = {
         ...proofs,
         addressSeed: addressSeed.toString(),
       };
 
       localStorage.setItem(INPUTS, JSON.stringify(inputs));
-      localStorage.setItem(ADDRESS, addr);
+      // localStorage.setItem(ADDRESS, addr);
     };
     executeCode();
   }, []);
+
+  // console.log({ address });
 
   return (
     <div className="flex w-full flex-col gap-2 items-center justify-between">
       <h2 className="text-xl font-bold">Welcome!!!</h2>
       <div className="flex items-center">
-        <p className="break-all text-center">{address}</p>
+        <p className="break-all text-center">{addr}</p>
       </div>
       <BalanceView />
       <div style={{ fontWeight: "bold" }}>
