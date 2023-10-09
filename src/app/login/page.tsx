@@ -40,15 +40,17 @@ const DashboardView: React.FC = () => {
       window.history.replaceState({}, document.title, "/");
       const state: Params = JSON.parse(localStorage.getItem(STATE)!);
       // console.log({ jwt });
-      const { salt }: { salt: string } = await fetch(proxy(config.salt), {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          token: jwt,
-        }),
-      }).then((res) => res.json());
+      // const { salt }: { salt: string } = await fetch(proxy(config.salt), {
+      //   method: "POST",
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //   },
+      //   body: JSON.stringify({
+      //     token: jwt,
+      //   }),
+      // }).then((res) => res.json());
+
+      const salt = "";
 
       console.log({ salt });
       console.log({ jwt });

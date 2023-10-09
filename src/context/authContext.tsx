@@ -49,7 +49,7 @@ export const AuthProvider: FC = ({ children }) => {
     getAddress(idToken);
   }, [fetchSalt, getAddress]);
 
-  console.log({ address });
+  // console.log({ address });
 
   return (
     <AuthContext.Provider value={{ address }}>{children}</AuthContext.Provider>
